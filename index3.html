@@ -89,21 +89,22 @@
       color: #4bad12;
       border: none;
       background: none;
+      font-size: 12px;
     }
     .complete:hover {
       color: #fff;
-      background-color: #4bad12;
+      background-color: #285a0b;
       border-radius: 5px;
       cursor: pointer;
     }
-    .completed{
-        text-decoration: line-through;
-        color: gray;
+    .completed {
+      text-decoration: line-through;
+      color: gray;
     }
 
-    .todo-item-input{
-        border: none;
-        outline: none;
+    .todo-item-input {
+      border: none;
+      outline: none;
     }
   </style>
   <body>
@@ -118,126 +119,113 @@
         />
         <button id="todoBtn" type="button">Add</button>
       </form>
-      <ul class="todo-list">
-
-      </ul>
+      <ul class="todo-list"></ul>
     </div>
 
     <script>
-        const todos = [
-            {
-                Text:"todo-item1",
-                isComplete : false,
-            },
-            {
-                Text : "todo-item2",
-                isComplete : false,
-            }
-        ];
+      const todos = [
+        {
+          Text: "todo-item1",
+          isComplete: false,
+        },
+        {
+          Text: "todo-item2",
+          isComplete: false,
+        },
+      ];
 
-        function createTodo(){      
-        let todoinput =document.querySelector("#todo-input");
+      function createTodo() {
+        let todoinput = document.querySelector("#todo-input");
         let inputValue = todoinput.value.trim();
-      
-        if(inputValue === ""){
-            alert("Please type something before adding.");
-            return;
+
+        if (inputValue === "") {
+          alert("Please type something before adding.");
+          return;
         }
         let todo = {
-                        Text : inputValue,
-                        isComplete :false,
-               
-            };
-        
+          Text: inputValue,
+          isComplete: false,
+        };
 
         todos.push(todo);
         todoinput.value = "";
         todoinput.focus();
         ShowTodos();
-        };
+      }
 
+      let todoBtn = document.querySelector("#todoBtn");
+      todoBtn.addEventListener("click", createTodo);
 
-        let todoBtn = document.querySelector("#todoBtn");
-        todoBtn.addEventListener("click",createTodo);
-        
-        let ulElement = document.querySelector(".todo-list");
-        function ShowTodos() {
-            ulElement.innerHTML = "";
-            todos.forEach(function(todo,index){
-                let liElement = document.createElement("li");
-                liElement.classList.add("todo-item");
-                
-                let todoIteminput = document.createElement("input");
-                todoIteminput.classList.add("todo-item-input");
-                todoIteminput.value  = todo.Text;
-                todoIteminput.disabled = true;
+      let ulElement = document.querySelector(".todo-list");
+      function ShowTodos() {
+        ulElement.innerHTML = "";
+        todos.forEach(function (todo, index) {
+          let liElement = document.createElement("li");
+          liElement.classList.add("todo-item");
 
+          let todoIteminput = document.createElement("input");
+          todoIteminput.classList.add("todo-item-input");
+          todoIteminput.value = todo.Text;
+          todoIteminput.disabled = true;
 
-                let divElement = document.createElement("div");
-                
-                if (todo.isComplete){
-                    todoIteminput.classList.add("completed");
-                }
-                let completeBtn = document.createElement("button");
-                completeBtn.classList.add("complete");
-                // completeBtn.innerText = "Complete";
-                if(todo.isComplete){
-                    completeBtn.innerText = "Incomplete";
-                    
-                }else{
-                    completeBtn.innerText = "Complete";
-                }
+          let divElement = document.createElement("div");
 
-                function isCompleted(){
-                    if(todo.isComplete === false){
-                        todo.isComplete = true;
-                    }else{
-                        todo.isComplete = false;
-                    }
-                    ShowTodos();
-                };
-                completeBtn.addEventListener("click",isCompleted);
+          if (todo.isComplete) {
+            todoIteminput.classList.add("completed");
+          }
+          let completeBtn = document.createElement("button");
+          completeBtn.classList.add("complete");
+          // completeBtn.innerText = "Complete";
+          if (todo.isComplete) {
+            completeBtn.innerText = "Incomplete";
+          } else {
+            completeBtn.innerText = "Complete";
+          }
 
+          function isCompleted() {
+            if (todo.isComplete === false) {
+              todo.isComplete = true;
+            } else {
+              todo.isComplete = false;
+            }
+            ShowTodos();
+          }
+          completeBtn.addEventListener("click", isCompleted);
 
+          let editBtn = document.createElement("button");
+          editBtn.classList.add("edit");
+          editBtn.innerText = "Edit";
 
-                let editBtn = document.createElement("button");
-                editBtn.classList.add("edit");
-                editBtn.innerText = "Edit";
-                
-                function isEdit(){
-                    todoIteminput.disabled = false;
-                    todoIteminput.focus();
+          function isEdit() {
+            todoIteminput.disabled = false;
+            todoIteminput.focus();
+          }
+          editBtn.addEventListener("click", isEdit);
 
-                };
-                editBtn.addEventListener("click",isEdit);
+          let deleteBtn = document.createElement("button");
+          deleteBtn.classList.add("delete");
+          deleteBtn.innerText = "Delete";
 
-                
-                let deleteBtn = document.createElement("button");
-                deleteBtn.classList.add("delete");
-                deleteBtn.innerText = "Delete";
+          function isDelete() {
+            todos.splice(index, 1);
+            ShowTodos();
+          }
 
+          deleteBtn.addEventListener("click", isDelete);
 
-                function isDelete(){
-                   todos.splice(index,1);
-                   ShowTodos();
-                }
+          liElement.appendChild(todoIteminput);
+          divElement.appendChild(completeBtn);
+          divElement.appendChild(editBtn);
+          divElement.appendChild(deleteBtn);
+          liElement.appendChild(divElement);
 
-                deleteBtn.addEventListener("click",isDelete);
+          ulElement.appendChild(liElement);
 
-                liElement.appendChild(todoIteminput);
-                divElement.appendChild(completeBtn);
-                divElement.appendChild(editBtn);
-                divElement.appendChild(deleteBtn);
-                liElement.appendChild(divElement);
+          console.log(liElement);
+        });
+      }
 
-
-                ulElement.appendChild(liElement);
-
-                console.log(liElement);
-            });
-        };
-        
-       ShowTodos();
+      ShowTodos();
     </script>
   </body>
 </html>
